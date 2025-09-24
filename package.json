@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "move:test": "node ./scripts/move/test",
-    "move:compile": "node ./scripts/move/compile",
+    "move:compile": "node ./scripts/move/compile && node ./scripts/move/get_abi",
     "move:publish": "node ./scripts/move/publish",
     "move:upgrade": "node ./scripts/move/upgrade",
     "dev": "next dev",
