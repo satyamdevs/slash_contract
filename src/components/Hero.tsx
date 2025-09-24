@@ -1,12 +1,12 @@
-import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export default function Hero() {
   return (
-    <main className="flex-grow flex flex-col items-center justify-center h-[60vh] max-sm:h-[42vh] app-background">
+    <main className="flex-grow flex flex-col items-center justify-center h-[60vh] max-sm:h-[42vh]">
       <section className="text-center flex flex-col items-center justify-end">
-        <h1 className="text-3xl md:text-7xl font-bold tracking-tighter bg-gradient-to-b from-white to-[#2a57ea] dark:from-white dark:to-[#6EA8FF] text-transparent bg-clip-text">
-          Ask. Answer. <br /> Stay Anonymous.
+        <h1 className="text-3xl md:text-7xl font-bold tracking-tighter gradient-text">
+          Decentralizing Trust Between <br /> Employers and Workers.
         </h1>
         <p className="mt-5 text-xl font-semibold text-gray-200 text-center tracking-tight leading-6 max-w-2xl">
           Anonmily — Your thoughts, your rules, your mystery.

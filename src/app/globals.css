@@ -79,14 +79,22 @@
 /* index.css */
 
 .app-background {
-  position: absolute;
-  inset: 0;
-  z-index: 0;
-  background: #0f172a;
+  min-height: 100vh; /* min-h-screen */
+  width: 100%; /* w-full */
+  background: black; /* bg-black */
+  position: absolute; /* absolute */
+  inset: 0; /* inset-0 */
+  z-index: 0; /* z-0 */
   background-image:
-    radial-gradient(circle, rgba(139,92,246,0.6) 1px, transparent 1px),
-    radial-gradient(circle, rgba(59,130,246,0.4) 1px, transparent 1px),
-    radial-gradient(circle, rgba(236,72,153,0.5) 1px, transparent 1px);
-  background-size: 20px 20px, 40px 40px, 60px 60px;
-  background-position: 0 0, 10px 10px, 30px 30px;
+    radial-gradient(circle at 50% 100%, rgba(70, 85, 110, 0.5) 0%, transparent 60%),
+    radial-gradient(circle at 50% 100%, rgba(99, 102, 241, 0.4) 0%, transparent 70%),
+    radial-gradient(circle at 50% 100%, rgba(181, 184, 208, 0.3) 0%, transparent 80%);
+}
+
+.gradient-text {
+  background-image: linear-gradient(to right, #a1c4fd, #c2e9fb);
+  -webkit-background-clip: text;
+  -moz-background-clip: text;
+  background-clip: text;
+  color: transparent;
 }

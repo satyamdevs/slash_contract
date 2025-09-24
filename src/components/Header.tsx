@@ -5,10 +5,13 @@ import { WalletSelector } from "./WalletSelector";
 
 export function Header() {
   return (
-    <nav className="p-4 md:p-6 font-display bg-white dark:bg-gray-900 shadow ">
+    <nav className="p-4 md:p-6 font-display dark:bg-gray-900 shadow ">
       <div className="container mx-auto flex flex-wrap md:flex-nowrap justify-between items-center ">
         {/* Title */}
-        <Link href="/" className="text-2xl font-bold">
+        <Link
+          href="/"
+          className="text-2xl font-bold gradient-text"
+        >
           SlashContract
         </Link>
 
