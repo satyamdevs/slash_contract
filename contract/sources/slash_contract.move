@@ -1,5 +1,6 @@
-module 0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567::slash_contract {
+module 0xbcd2f2175728ca6431ba0b833f282cb62437f8a29b25671712f032dc719d00d8::slash_contract {
     use std::signer;
+    use std::vector;
     use aptos_framework::aptos_coin::AptosCoin;
     use aptos_framework::coin;
     use aptos_framework::table;
@@ -23,6 +24,7 @@ module 0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567::slash
     struct WorkContractState has key {
     contracts: table::Table<u64, WorkContract>,  // contractId -> contract
     balances: table::Table<u64, coin::Coin<AptosCoin>>, // contractId -> locked funds
+    contract_ids: vector<u64>,
     next_id: u64,  // incrementing id for contracts
     }
 
@@ -40,6 +42,7 @@ module 0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567::slash
         move_to(employer, WorkContractState {
             contracts: table::new(),
             balances: table::new(),
+            contract_ids: vector::empty<u64>(),
             next_id: 0,
         });
     };
@@ -65,6 +68,8 @@ module 0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567::slash
 
     // hold the funds in balances
     table::add(&mut state.balances, contract_id, locked_funds);
+    vector::push_back(&mut state.contract_ids, contract_id);
+
     }
 
 
@@ -135,27 +140,44 @@ coin::deposit<AptosCoin>(contract.worker, coin::extract(&mut coins, payment_afte
 }
 
 #[view]
+    public fun get_contract_by_employer(
+        employer_addr: address,
+        contract_id: u64
+    ): WorkContract acquires WorkContractState {
+        // Assert the state exists to provide a clear error if not
+        assert!(exists<WorkContractState>(employer_addr), 50);
+
+        let state = borrow_global<WorkContractState>(employer_addr);
+        assert!(table::contains(&state.contracts, contract_id), 51);
+
+        // Borrow and return a copy of the contract struct
+        *table::borrow(&state.contracts, contract_id)
+    }
+
+#[view]
 public fun get_all_contracts_by_employer(
     employer_addr: address
 ): vector<WorkContract> acquires WorkContractState {
-    assert!(exists<WorkContractState>(employer_addr), 50); // Employer must have contracts
+    assert!(exists<WorkContractState>(employer_addr), 50);
 
     let state = borrow_global<WorkContractState>(employer_addr);
-    let contract_ids = table::keys(&state.contracts); // Get all contract IDs
+    
+    // CORRECT: Get the keys from the vector you are maintaining
+    let contract_ids = &state.contract_ids;
 
     let contracts = vector::empty<WorkContract>();
     let i = 0;
-    let len = vector::length(&contract_ids);
+    let len = vector::length(contract_ids);
 
-    while (i < len) {
-        let contract_id = *vector::borrow(&contract_ids, i);
-        let contract = table::borrow(&state.contracts, contract_id);
-        vector::push_back(&mut contracts, *contract);
-        i = i + 1;
-    };
+while (i < len) {
+    let contract_id = *vector::borrow(contract_ids, i);
+    let contract = table::borrow(&state.contracts, contract_id);
+    vector::push_back(&mut contracts, *contract);
+    i = i + 1;
+};
+
 
     contracts
 }
-
 
 }

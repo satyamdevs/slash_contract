@@ -4,7 +4,7 @@ version = "1.0.0"
 authors = []
 
 [addresses]
-slash_contract = "0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567"
+slash_contract = "0xbcd2f2175728ca6431ba0b833f282cb62437f8a29b25671712f032dc719d00d8"
 std = "0x1"
 
 [dependencies]
