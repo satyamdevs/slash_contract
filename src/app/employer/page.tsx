@@ -1,4 +1,3 @@
-
 "use client";
 
 import { Header } from "@/components/Header";
@@ -60,9 +59,78 @@ export default function DashboardPage() {
               <div className="flex gap-3">
                 <button
                   onClick={refreshContractList}
+                  disabled={isLoading  transactionInProgress}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-gray-700 hover:bg-gray-600 disabled:opacity-50"
+                >
+                  <RefreshCcw className="w-4 h-4" />
+                  {isLoading ? "Refreshing..." : "Refresh"}
+                </button>
+                <button
+                  onClick={() => setShowModal(true)}
+                  className="flex items-center gap-2 px-4 py-2 rounded-lg bg-indigo-600 hover:bg-indigo-700"
+                >
+                  <Plus className="w-4 h-4" /> Create Contract
+                </button>
+              </div>
+            </div>
 
-> Rishav:
-disabled={isLoading ⠟⠵⠟⠺⠺⠞⠟⠺⠵⠞⠵⠞⠞⠟⠟⠞⠺⠟⠵⠟⠟⠺⠞⠵⠟⠵⠞⠵⠺⠞⠵⠺⠺⠟⠺⠟⠵⠵⠵⠟⠵⠵⠺⠵⠟⠵⠟⠵⠟⠞⠺⠞⠟⠟⠺⠞⠞⠞⠟⠞⠟⠞⠞⠵⠟⠟⠞⠟⠵⠵⠺⠞⠟⠺⠺⠵⠟⠟⠞⠞⠺⠟⠺⠞⠵⠺⠵⠞⠞⠵⠵⠵⠞⠞⠺⠞⠟⠞⠞⠟⠞⠵⠞⠞⠞⠞⠞⠵⠟⠺⠵⠞⠞⠺⠟⠟⠞⠵⠺⠵⠵⠺⠟⠺⠞⠵⠵⠵⠵⠟⠟⠞⠟⠟⠞⠟⠵⠵⠵⠟⠺⠺⠟⠞⠺⠺⠺⠞⠞⠞⠞⠞⠵⠺⠟⠟⠞⠞⠞⠵⠺⠟⠵⠟⠞⠵⠞⠺⠺⠞⠺⠺⠵⠞⠵⠞⠵⠺⠵⠺⠞⠺⠟⠞⠵⠞⠵⠵⠵⠵⠺⠟⠵⠟⠟⠟⠟⠵⠵⠟⠺⠺⠟⠵⠞⠵⠵⠺⠟⠵⠟⠺⠟⠺⠞⠞⠺⠟⠵⠞⠟⠺⠟⠞⠵⠺⠞⠵⠟⠺⠵⠞⠟⠵⠵⠺⠵⠵⠵⠞⠟⠟⠺⠺⠵⠟⠟⠞⠟⠵⠟⠞⠞⠺⠞⠟⠺⠵⠵⠟⠺⠟⠞⠺⠟⠟⠟⠞⠵⠺⠵⠞⠺⠺⠞⠟⠵⠺⠞⠵⠞⠞⠵⠵⠟⠞⠺⠵⠟⠵⠵⠺⠟⠟⠟⠺⠵⠞⠟⠞⠞⠺⠺⠵⠟⠟⠺⠺⠺⠞⠵⠟⠺⠵⠞⠵⠟⠟⠵⠞⠺⠵⠵⠵⠞⠺⠞⠟⠞⠵⠞⠺⠺⠞⠟⠞⠵⠞⠺⠵⠟⠟⠺⠺⠟⠟⠞⠞⠵⠟⠟⠺⠟⠞⠺⠟⠵⠞⠵⠟⠺⠞⠵⠺⠟⠟⠞⠟⠟⠺⠟⠵⠞⠵⠟⠞⠵⠟⠞⠞⠺⠞⠞⠟⠟⠵⠟⠟⠵⠟⠞⠟⠟⠺⠵⠟⠟⠟⠞⠞⠞⠞⠞⠺⠵⠟⠟⠵⠟⠺⠞⠞⠞⠞⠵⠵⠺⠺⠟⠞⠞⠟⠟⠞⠟⠵⠞⠞⠟⠺⠞⠟⠺⠟⠵⠟⠟⠵⠺⠞⠺⠞⠵⠟⠞⠟⠵⠟⠺⠞⠵⠟⠟⠵⠞⠟⠟⠟⠞⠺⠺⠵⠞⠞⠵⠟⠟⠵⠞⠞⠺⠞⠺⠺⠵⠞⠵⠺⠺⠺⠵⠵⠵⠞⠟⠵⠟⠵⠟⠟⠺⠺⠞⠺⠟⠵⠟⠵⠟⠵⠟⠞⠵⠺⠺⠺⠞⠟⠟⠵⠟⠵⠺⠵⠺⠵⠞⠺⠵⠺⠞⠞⠞⠵⠟⠵⠟⠞⠞⠵⠟⠵⠞⠺⠺⠞⠟⠟⠵⠵⠞⠵⠟⠺⠞⠞⠺⠟⠺⠺⠵⠺⠞⠞⠵⠞⠺⠟⠞⠞⠺⠟⠺⠺⠞⠵⠵⠺⠺⠺⠞⠟⠵⠞⠺⠺⠵⠺⠵⠺⠵⠺⠞⠟⠵⠵⠵⠵⠵⠞⠞⠺⠟⠞⠟⠞⠟⠟⠟⠞⠟⠞⠵⠵⠟⠵⠞⠺⠟⠺⠞⠵⠞⠟⠟⠵⠟⠞⠟⠺⠵⠟⠟⠟⠞⠺⠞⠟⠵⠺⠺⠞⠺⠟⠵⠟⠞⠞⠺⠺⠵⠟⠵⠟⠟⠺⠵⠵⠺⠵⠞⠞⠺⠞⠞⠺⠵⠵⠵⠟⠞⠺⠞⠵⠞⠺⠟⠺⠟⠵⠟⠞⠞⠞⠞⠞⠞⠺⠟⠟⠟⠟⠟⠵⠞⠵⠞⠺⠟⠺⠺⠵⠞⠞⠵⠞⠞⠺⠺⠟⠞⠟⠺⠺⠺⠺⠟⠞⠵⠺⠟⠵⠺⠟⠞⠵⠺⠵⠵⠵⠟⠟⠞⠺⠟⠵⠺⠺⠵⠞⠵⠺⠵⠵⠞⠺⠺⠵⠟⠺⠞⠞⠺⠟⠵⠺⠵⠵⠵⠺⠟⠟⠺⠵⠺⠺⠺⠞⠵⠵⠺⠵⠞⠟⠞⠞⠞⠞⠞⠞⠟⠟⠞⠞⠺⠟⠵⠵⠺⠵⠞⠵⠞⠺⠺⠺⠺⠞⠵⠞⠺⠵⠞⠞⠺⠺⠺⠺⠞⠞⠺⠞⠺⠵⠺⠺⠞⠺⠟⠺⠞⠟⠺⠟⠺⠵⠞⠟⠞⠵⠺⠵⠞⠟⠺⠞⠵⠺⠺⠟⠟⠞⠟⠟⠵⠞⠟⠵⠺⠟⠵⠞⠵⠵⠺⠺⠺⠺⠟⠞⠟⠞⠺⠟⠺⠞⠵⠺⠺⠞⠺⠞⠵⠞⠟⠞⠵⠞⠟⠵⠺⠟⠟⠵⠺⠞⠺⠞⠵⠟⠺⠟⠞⠟⠵⠵⠟⠺⠵⠞⠟⠺⠟⠵⠟⠟⠟⠺⠟⠞⠞⠺⠞⠞⠵⠟⠟⠟⠟⠟⠟⠵⠟⠞⠟⠞⠵⠺⠵⠟⠺⠟⠺⠺⠺⠟⠺⠞⠟⠟⠺⠺⠞⠵⠺⠞⠵⠵⠺⠟⠞⠺⠟⠞⠵⠺⠵⠵⠟⠞⠟⠺⠞⠺⠟⠺⠞⠺⠞⠟⠟⠵⠞⠟⠺⠺⠺⠺⠵⠟⠟⠵⠵⠵⠵⠟⠞⠟⠺⠵⠵⠟⠵⠞⠵⠺⠺⠵⠺⠞⠵⠵⠺⠺⠺⠵⠟⠞⠞⠵⠺⠵⠞⠵⠵⠵⠞⠺⠞⠺⠟⠟⠺⠟⠵⠵⠟⠺⠟⠵⠞⠺⠵⠟⠺⠞⠺⠞⠺⠵⠵⠺⠞⠞⠞⠞⠞⠞⠵⠺⠺⠵⠺⠟⠺⠺⠵⠞⠟⠺⠺⠟⠺⠞⠞⠺⠺⠵⠺⠵⠺⠺⠺⠺⠞⠵⠵⠞⠵⠞⠵⠺⠟⠞⠟⠞⠟⠟⠺⠵⠺⠞⠟⠺⠺⠟⠵⠟⠵⠺⠞⠞⠺⠞⠵⠺⠺⠺⠵⠺⠺⠵⠞⠞⠺⠵⠟⠟⠞⠵⠵⠞⠺⠟⠟⠞⠟⠞⠺⠟⠟⠺⠺⠞⠺⠟⠺⠞⠞⠟⠟⠵⠺⠵⠞⠟⠟⠺⠞⠞⠟⠵⠟⠞⠵⠺⠺⠞⠟⠟⠟⠺⠞⠞⠺⠞⠺⠞⠵⠵⠺⠵⠺⠞⠵⠟⠵⠺⠺⠵⠟⠟⠟⠞⠟⠞⠺⠞⠞⠵⠟⠞⠵⠟⠺⠟⠞⠟⠵⠵⠞⠵⠺⠵⠵⠵⠟⠵⠞⠟⠞⠺⠟⠵⠞⠺⠵⠞⠺⠺⠺⠞⠵⠺⠺⠵⠺⠺⠺⠞⠟⠟⠞⠟⠺⠟⠟⠟⠺⠺⠟⠺⠺⠞⠟⠺⠺⠟⠞⠞⠵⠞⠟⠺⠞⠺⠟⠵⠺⠟⠺⠵⠺⠟⠞⠺⠺⠞⠵⠞⠺⠺⠵⠞⠟⠵⠵⠞⠞⠟⠺⠺⠵⠺⠺⠟⠺⠵⠺⠟⠞⠵⠵⠺⠵⠟⠵⠵⠞⠟⠞⠺⠟⠵⠟⠵⠺⠺⠞⠺⠟⠺⠺⠺⠞⠺⠟⠞⠟⠟⠞⠞⠞⠞⠟⠵⠞⠞⠟⠞⠺⠟⠵⠵⠵⠞⠟⠟⠵⠟⠟⠟⠟⠞⠞⠟⠵⠞⠞⠟⠺⠺⠺⠟⠞⠟⠺⠟⠵⠵⠟⠟⠺⠟⠟⠺⠵⠺⠺⠺⠞⠵⠟⠟⠺⠵⠟⠞⠟⠵⠺⠵⠺⠟⠵⠟⠞⠺⠞⠟⠺⠺⠵⠞⠞⠺⠞⠵⠞⠵⠟⠺⠵⠟⠵⠺⠞⠵⠵⠺⠟⠟⠺⠵⠟⠟⠞⠞⠺⠵⠵⠞⠞⠟⠺⠟⠟⠞⠺⠞⠺⠺⠞⠞⠺⠟⠞⠟⠞⠟⠟⠞⠞⠞⠵⠵⠺⠺⠟⠞⠺⠵⠟⠺⠟⠞⠟⠞⠞⠟⠟⠞⠞⠞⠞⠺⠵⠟⠺⠞⠵⠺⠺⠞⠟⠞⠟⠵⠺⠟⠺⠞⠵⠟⠞⠟⠺⠞⠵⠵⠺⠵⠵⠺⠟⠵⠞⠟⠺⠟⠞⠞⠵⠞⠵⠞⠺⠵⠞⠺⠺⠞⠵⠺⠵⠺⠺⠵⠟⠵⠵⠺⠟⠟⠵⠞⠞⠺⠵⠺⠵⠵⠞⠟⠵⠞⠟⠞⠺⠵⠺⠺⠞⠺⠞⠟⠟⠞⠺⠵⠞⠟⠵⠞⠵⠺⠺⠟⠟⠵⠵⠞⠵⠺⠺⠞⠵⠵⠟⠟⠵⠺⠞⠟⠺⠺⠞⠟⠵⠟⠺⠟⠵⠞⠺⠟⠵⠺⠵⠞⠵⠞⠟⠞⠺⠺⠞⠞⠺⠵⠺⠺⠞⠟⠵⠞⠞⠟⠵⠟⠟⠟⠺⠺⠟⠟⠞⠵⠺⠺⠺⠺⠵⠞⠵⠺⠵⠟⠺⠟⠵⠺⠵⠺⠵⠵⠞⠵⠞⠵⠞⠟⠟⠵⠵⠞⠟⠵⠞⠺⠞⠟⠞⠵⠺⠺⠵⠟⠞⠟⠟⠺⠺⠞⠵⠟⠞⠵⠞⠵⠺⠵⠞⠺⠵⠟⠟⠺⠺⠟⠺⠟⠺⠟⠟⠵⠟⠵⠵⠵⠟⠟⠵⠟⠟⠺⠺⠺⠞⠟⠞⠺⠵⠵⠺⠵⠺⠞⠵⠟⠵⠵⠟⠵⠟⠺⠺⠞⠟⠟⠺⠵⠵⠺⠵⠟⠞⠞⠟⠵⠟⠟⠞⠺⠵⠵⠟⠞⠟⠵⠟⠟⠺⠵⠺⠟⠵⠺⠞⠺⠟⠵⠞⠺⠞⠺⠵⠟⠞⠺⠵⠟⠵⠟⠞⠟⠺⠞⠺⠺⠟⠟⠟⠵⠞⠞⠟⠵⠺⠵⠟⠵⠟⠞⠞⠵⠺⠵⠵⠞⠟⠟⠺⠞⠺⠵⠵⠺⠺⠺⠞⠟⠞⠞⠺⠟⠵⠟⠞⠞⠟⠟⠺⠺⠞⠵⠺⠞⠺⠺⠺⠺⠺⠺⠟⠵⠺⠞⠟⠟⠺⠟⠞⠟⠺⠺⠺⠵⠺⠵⠵⠞⠵⠟⠟⠟⠺⠺⠟⠺⠵⠵⠵⠺⠺⠟⠵⠵⠺⠺⠞⠞⠵⠞⠞⠵⠞⠞⠵⠺⠵⠺⠺⠟⠟⠺⠞⠺⠵⠵⠺⠺⠵⠵⠺⠟⠵⠵⠺⠟⠺⠵⠟⠞⠺⠞⠟⠟⠟⠞⠟⠵⠺⠞⠞⠞⠵⠞⠵⠺⠞⠺⠺⠟⠵⠵⠵⠺⠵⠵⠵⠺⠺⠵⠟⠵⠵⠺⠟⠟⠞⠞⠞⠟⠵⠞⠞⠞⠺⠺⠟⠟⠟⠵⠵⠺⠟⠟⠟⠞⠺⠞⠟⠵⠞⠟⠞⠺⠵⠵⠵⠟⠺⠞⠵⠟⠵⠵⠞⠺⠞⠺⠺⠟⠺⠺⠵⠟⠵⠟⠟⠵⠞⠵⠟⠟⠞⠵⠟⠞⠵⠵⠞⠵⠟⠵⠵⠞⠞⠵⠺⠞⠞⠺⠵⠞⠵⠺⠺⠺⠟⠺⠺⠺⠺⠵⠟⠟⠞⠵⠺⠵⠺⠺⠺⠞⠵⠵⠺⠵⠵⠺⠵⠞⠟⠵⠞⠵⠞⠵⠵⠵⠺⠞⠵⠵⠞⠺⠵⠺⠟⠺⠞⠞⠟⠞⠞⠵⠞⠵⠞⠺⠞⠟⠞⠟⠟⠺⠵⠞⠺⠟⠵⠵⠞⠞⠺⠟⠞⠞⠞⠺⠺⠟⠺⠞⠞⠺⠞⠞⠺⠞⠺⠞⠞⠺⠺⠵⠵⠺⠟⠞⠺⠵⠵⠟⠵⠟⠵⠟⠞⠟⠟⠵⠵⠵⠵⠟⠵⠟⠺⠵⠵⠺⠞⠞⠵⠺⠵⠟⠺⠺⠵⠟⠵⠵⠟⠵⠞⠟⠞⠟⠟⠵⠵⠺⠞⠺⠟⠺⠺⠺⠺⠞⠺⠵⠞⠵⠺⠺⠞⠟⠟⠞⠞⠺⠺⠵⠞⠺⠵⠺⠵⠞⠟⠺⠞⠺⠞⠞⠟⠞⠞⠞⠞⠞⠞⠟⠟⠵⠞⠺⠟⠟⠞⠞⠵⠺⠺⠵⠵⠵⠞⠞⠟⠟⠵⠵⠟⠵⠺⠺⠟⠟⠟⠞⠺⠺⠵⠺⠺⠺⠺⠵⠞⠟⠟⠺⠺⠟⠟⠵⠞⠞⠺⠺⠺⠺⠺⠞⠺⠞⠵⠺⠞⠞⠞⠟⠺⠺⠵⠵⠞⠟⠞⠺⠺⠺⠟⠟⠵⠟⠞⠟⠵⠺⠺⠟⠵⠟⠞⠺⠞⠺⠺⠟⠟⠞⠺⠞⠟⠺⠟⠞⠟⠺⠞⠵⠟⠵⠟⠞⠵⠺⠺⠺⠞⠺⠟⠺⠵⠟⠟⠟⠟⠟⠞⠟⠟⠟⠵⠟⠵⠵⠞⠵⠞⠺⠞⠵⠞⠞⠵⠵⠺⠟⠟⠵⠟⠺⠺⠟⠞⠺⠟⠵⠞⠵⠟⠵⠵⠞⠺⠞⠟⠟⠺⠟⠺⠺⠞⠵⠺⠞⠟⠵⠟⠟⠞⠞⠵⠞⠟⠵⠞⠺⠞⠵⠵⠺⠺⠺⠞⠺⠟⠞⠟⠵⠞⠞⠟⠟⠞⠵⠺⠟⠞⠟⠞⠞⠵⠞⠞⠵⠵⠞⠞⠵⠺⠟⠺⠵⠺⠞⠵⠞⠞⠞⠵⠺⠟⠟⠵⠞⠞⠵⠺⠟⠺⠺⠵⠟⠟⠞⠵⠞⠞⠵⠟⠵⠵⠺⠵⠟⠟⠞⠺⠞⠵⠺⠵⠺⠞⠞⠵⠟⠵⠟⠟⠺⠵⠞⠞⠞⠟⠵⠟⠺⠺⠵⠺⠺⠺⠵⠟⠞⠵⠺⠵⠞⠺⠵⠺⠟⠵⠞⠵⠺⠵⠟⠺⠵⠺⠺⠺⠞⠞⠵⠞⠵⠟⠵⠵⠺⠵⠟⠺⠺⠞⠟⠞⠺⠵⠵⠞⠞⠺⠞⠟⠵⠵⠵⠟⠵⠵⠺⠞⠺⠟⠵⠵⠺⠞⠞⠵⠺⠞⠞⠟⠟⠺⠞⠞⠺⠺⠺⠟⠺⠵⠟⠟⠵⠟⠞⠵⠺⠞⠟⠺⠞⠞⠺⠞⠺⠟⠞⠞⠵⠺⠞⠵⠺⠞⠵⠺⠟⠵⠺⠺⠺⠟⠟⠺⠞⠵⠵⠞⠵⠞⠺⠺⠟⠺⠺⠵⠵⠺⠺⠺⠞⠵⠟⠺⠵⠟⠺⠺⠞⠞⠟⠟⠺⠞⠺⠞⠞⠟⠞⠺⠞⠟⠞⠺⠵⠵⠟⠺⠟⠟⠺⠵⠟⠺⠟⠞⠟⠺⠞⠺⠵⠺⠵⠵⠞⠺⠺⠟⠵⠵⠟⠵⠵⠺⠵⠞⠞⠞⠟⠟⠞⠟⠵⠺⠺⠟⠞⠟⠺⠵⠺⠟⠺⠺⠟⠞⠺⠞⠺⠞⠞⠟⠵⠺⠵⠺⠞⠺⠵⠟⠟⠞⠞⠟⠵⠺⠟⠟⠞⠟⠞⠞⠞⠟⠞⠵⠟⠵⠺⠞⠺⠺⠵⠟⠞⠵⠵⠺⠞⠵⠟⠵⠞⠞⠟⠟⠺⠺⠺⠺⠵⠟⠟⠞⠞⠺⠺⠞⠵⠵⠺⠺⠺⠟⠞⠵⠺⠞⠵⠺⠵⠵⠺⠵⠟⠺⠟⠵⠞⠞⠞⠵⠵⠺⠺⠞⠵⠟⠞⠵⠟⠺⠞⠺⠟⠺⠺⠺⠺⠞⠺⠟⠺⠺⠟⠞⠵⠺⠵⠟⠞⠞⠺⠵⠟⠺⠟⠵⠞⠞⠟⠵⠞⠺⠞⠵⠵⠟⠺⠵⠞⠺⠺⠞⠟⠺⠵⠟⠟⠵⠺⠵⠺⠞⠟⠟⠟⠞⠺⠟⠺⠵⠺⠟⠟⠵⠞⠺⠺⠞⠞⠞⠟⠞⠵⠟⠞⠺⠞⠺⠞⠟⠺⠟⠞⠟⠵⠟⠟⠺⠺⠟⠞⠟⠞⠵⠺⠞⠺⠟⠞⠵⠟⠞⠺⠞⠵⠺⠺⠺⠟⠺⠵⠟⠞⠟⠟⠺⠵⠺⠞⠵⠺⠟⠺⠞⠟⠞⠺⠺⠟⠞⠟⠞⠵⠟⠵⠟⠞⠞⠵⠞⠟⠵⠞⠞⠺⠵⠺⠵⠵⠟⠺⠺⠺⠞⠞⠟⠟⠺⠵⠺⠞⠺⠞⠞⠺⠞⠟⠵⠵⠞⠞⠺⠞⠺⠺⠞⠟⠞⠞⠵⠟⠞⠞⠟⠺⠵⠞⠵⠺⠟⠵⠞⠵⠺⠺⠵⠺⠞⠞⠺⠞⠞⠞⠺⠵⠟⠞⠵⠺⠺⠞⠟⠟⠞⠞⠟⠵⠺⠞⠺⠞⠵⠞⠟⠞⠺⠵⠟⠵⠟⠵⠞⠟⠟⠵⠞⠵⠞⠟⠞⠺⠵⠵⠵⠟⠺⠟⠵⠵⠺⠺⠞⠺⠺⠞⠺⠞⠵⠟⠟⠺⠺⠺⠵⠵⠺⠟⠞⠟⠺⠟⠞⠞⠞⠟⠵⠺⠞⠺⠵⠵⠺⠟⠺⠞⠵⠺⠵⠞⠞⠵⠞⠵⠟⠵⠟⠺⠺⠵⠺⠞⠵⠞⠞⠟⠺⠺⠞⠵⠺⠵⠵⠵⠵⠵⠟⠺⠺⠺⠟⠞⠟⠵⠞⠵⠺⠵⠵⠵⠵⠞⠵⠞⠟⠟⠟⠞⠞⠟⠵⠺⠟⠵⠵⠞⠟⠵⠞⠺⠞⠞⠺⠵⠞⠵⠟⠞⠞⠟⠞⠺⠞⠞⠞⠵⠟⠞⠞⠞⠞⠺⠵⠵⠞⠺⠞⠺⠞⠵⠺⠞⠞⠺⠺⠟⠺⠵⠟⠵⠟⠟⠟⠟⠟⠞⠺⠵⠵⠞⠞⠞⠺⠟⠵⠞⠞⠟⠟⠵⠺⠞⠵⠺⠞⠞⠺⠟⠞⠞⠟⠺⠟⠟⠵⠺⠞⠞⠟⠵⠟⠟⠞⠺⠟⠞⠵⠞⠺⠵⠟⠞⠺⠺⠺⠵⠵⠵⠵⠞⠵⠞⠞⠞⠺⠞⠵⠵⠞⠵⠺⠵⠞⠵⠵⠟⠺⠵⠵⠵⠞⠺⠺⠺⠟⠟⠺⠵⠵⠺⠺⠺⠞⠵⠵⠺⠟⠞⠞⠵⠞⠟⠵⠟⠞⠺⠟⠟⠞⠟⠺⠟⠞⠵⠟⠞⠟⠟⠵⠵⠟⠵⠺⠞⠺⠟⠟⠞⠞⠺⠵⠵⠺⠵⠞⠺⠺⠟⠟⠺⠵⠵⠟⠵⠺⠺⠞⠺⠟⠺⠺ transactionInProgress}
+            {/* Contracts Section */}
+            {isLoading ? (
+              <p className="text-gray-400">Loading your contracts...</p>
+            ) : contracts.length === 0 ? (
+              <p className="text-gray-400">You have not created any contracts yet.</p>
+            ) : (
+              <div className="space-y-4">
+                {contracts.map((contract, id) => (
+                  <div
+                    key={id}
+                    className="p-4 bg-[#0f172a] rounded-xl border border-gray-700 shadow-md hover:border-indigo-600 transition"
+                  >
+                    {/* Header */}
+                    <div className="flex justify-between items-center mb-2">
+                      <h3 className="text-base font-semibold">Contract #{id}</h3>
+                      <span
+                        className={`flex items-center gap-1 px-2 py-0.5 text-xs rounded-full ${
+                          contract.is_completed ? "bg-green-600/20 text-green-400" : "bg-yellow-600/20 text-yellow-400"
+                        }`}
+                      >
+                        {contract.is_completed ? (
+                          <>
+                            <CheckCircle className="w-3 h-3" /> Completed
+                          </>
+                        ) : (
+                          <>
+                            <Clock className="w-3 h-3" /> In Progress
+                          </>
+                        )}
+                      </span>
+                    </div>
+
+                    {/* Contract Details */}
+                    <div className="space-y-0.5 text-gray-300 text-xs">
+                      <p>
+                        <span className="font-semibold">Worker:</span> {contract.worker}
+                      </p>
+                      <p>
+                        <span className="font-semibold">Amount:</span> {contract.amount} Octas
+                      </p>
+                      <p>
+                        <span className="font-semibold">Penalty:</span> {contract.penalty} Octas
+                      </p>
+                      <p>
+                        <span className="font-semibold">Deadline:</span>{" "}
+                        {new Date(contract.deadline * 1000).toLocaleDateString()}
+                      </p>
+                    </div>
+
+                    {/* Actions */}
+                    <div className="mt-3 flex gap-2">
+                      <button
+                        onClick={async () => {
+                          await markCompleted(id);
+                          await refreshContractList();
+                        }}
+                        disabled={contract.is_completed  transactionInProgress}
                         className="flex-1 py-1.5 text-sm rounded-lg bg-green-600 hover:bg-green-700 disabled:opacity-500 disabled:opacity-60"
                       >
                         Mark Completed
@@ -72,13 +140,11 @@ disabled={isLoading ⠟⠵⠟⠺⠺⠞⠟⠺⠵⠞⠵⠞⠞⠟⠟⠞⠺⠟⠵⠟
                           await refundOrFine(id);
                           await refreshContractList();
                         }}
-                        disabled={contract.is_claimed ⠺⠟⠞⠵⠟⠟⠺⠟⠵⠞⠟⠵⠵⠵⠞⠟⠵⠺⠞⠞⠞⠺⠟ !contract.is_completed}
+                        disabled={contract.is_claimed  transactionInProgress  !contract.is_completed}
                         className="flex-1 py-1.5 text-sm rounded-lg bg-indigo-600 hover:bg-indigo-700 disabled:opacity-50"
                       >
                         Settle & Pay
-
-> Rishav:
-</button>
+                        </button>
                     </div>
                   </div>
                 ))}
