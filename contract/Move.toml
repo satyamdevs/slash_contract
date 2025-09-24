@@ -1,0 +1,13 @@
+[package]
+name = "slash_contract"
+version = "1.0.0"
+authors = []
+
+[addresses]
+slash_contract = "0x242d944914d9597c6a4599c08ede76e3dd7ea1b6061d7b020ff0235b613b0567"
+std = "0x1"
+
+[dependencies]
+AptosFramework = { git = "https://github.com/aptos-labs/aptos-framework.git", rev = "mainnet", subdir = "aptos-framework" }
+
+[dev-dependencies]
