@@ -1,13 +1,22 @@
+"use client";
+
+import Link from "next/link";
 import { WalletSelector } from "./WalletSelector";
 
 export function Header() {
   return (
-    <div className="flex items-center justify-between px-4 py-2 max-w-screen-xl mx-auto w-full flex-wrap">
-      <h1 className="display">Boilerplate Template</h1>
+    <nav className="p-4 md:p-6 font-display bg-white dark:bg-gray-900 shadow ">
+      <div className="container mx-auto flex flex-wrap md:flex-nowrap justify-between items-center ">
+        {/* Title */}
+        <Link href="/" className="text-2xl font-bold">
+          SlashContract
+        </Link>
 
-      <div className="flex gap-2 items-center flex-wrap">
-        <WalletSelector />
+        {/* Connect Wallet */}
+        <div className="text-blue-300 border-2 border-black">
+          <WalletSelector />
+        </div>
       </div>
-    </div>
+    </nav>
   );
 }
