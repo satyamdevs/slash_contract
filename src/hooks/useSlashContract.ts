@@ -128,5 +128,6 @@ export const useSlashContract = () => {
     createContract,
     markCompleted,
     refundOrFine,
+    transactionInProgress,
   };
 };
