@@ -11,6 +11,8 @@ module 0xbcd2f2175728ca6431ba0b833f282cb62437f8a29b25671712f032dc719d00d8::slash
     //:!:>resource
     struct WorkContract has copy, drop, store {
         employer: address,
+        title: string,
+        description: string,
         worker: address,
         amount: u64,
         deadline: u64,         // task must be completed before this
@@ -32,6 +34,8 @@ module 0xbcd2f2175728ca6431ba0b833f282cb62437f8a29b25671712f032dc719d00d8::slash
     employer: &signer,
     worker: address,
     amount: u64,
+    title,
+    description,
     deadline: u64,
     penalty: u64
     ) acquires WorkContractState {
