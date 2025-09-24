@@ -1,131 +1,148 @@
-// components/EmployerDashboard.tsx
-"use client"
-import { useState } from "react";
+// src/pages/dashboard.tsx
 
-export default function EmployerDashboard() {
-  const [activeTab, setActiveTab] = useState<"put" | "review">("put");
+"use client";
 
+import { Header } from "@/components/Header"; // Assuming you have a Header component
+import { useSlashContract } from "@/hooks/useSlashContract";
+import { useWallet } from "@aptos-labs/wallet-adapter-react";
+import { useEffect, useState } from "react";
+
+export default function DashboardPage() {
+  // 1. Destructure all the functions and state from your hook
+  const { getMyContracts, createContract, markCompleted, refundOrFine, transactionInProgress } = useSlashContract();
+
+  const { account, connected } = useWallet();
+
+  // State for this component to hold the list of contracts and loading status
+  const [contracts, setContracts] = useState<any[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // 2. Create a function to fetch and update the contract list
+  const refreshContractList = async () => {
+    if (!connected) return;
+    setIsLoading(true);
+    const myContracts = await getMyContracts();
+    console.log(myContracts);
+    setContracts(myContracts);
+    setIsLoading(false);
+  };
+
+  // 3. Fetch the initial list of contracts when the wallet connects
+  useEffect(() => {
+    refreshContractList();
+    if (account) {
+      console.log("Account Address", account.address);
+    }
+  }, [connected]);
+
+  // 4. Create an event handler for your "Create Contract" form
+  const handleCreateSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const formData = new FormData(event.currentTarget);
+    const worker = formData.get("worker") as string;
+    const amount = parseInt(formData.get("amount") as string, 10);
+
+    // Example values for deadline and penalty
+    const deadline = Math.floor(Date.now() / 1000) + 3600; // 1 hour from now
+    const penalty = 100000;
+
+    await createContract(worker, amount, deadline, penalty);
+
+    // After the transaction, refresh the list to show the new contract
+    await refreshContractList();
+  };
+
+  // Render the UI
   return (
-    <div className="p-6">
-      {/* Tabs */}
-      <div className="flex gap-4 mb-6">
-        <button
-          onClick={() => setActiveTab("put")}
-          className={`px-4 py-2 rounded ${activeTab === "put" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-        >
-          Put Work
-        </button>
-        <button
-          onClick={() => setActiveTab("review")}
-          className={`px-4 py-2 rounded ${activeTab === "review" ? "bg-indigo-600 text-white" : "bg-gray-200"}`}
-        >
-          Review Work
-        </button>
-      </div>
+    <div className="app-background">
+      <Header />
+      <main className="container mx-auto p-8">
+        {!connected ? (
+          <p className="text-center">Please connect your wallet to manage your contracts.</p>
+        ) : (
+          <div>
+            {/* --- Create Contract Section --- */}
+            <div className="mb-8 p-6 border rounded-lg shadow-md">
+              <h2 className="text-2xl font-bold mb-4">Create a New Contract</h2>
+              <form onSubmit={handleCreateSubmit} className="flex flex-col gap-4">
+                <input name="worker" placeholder="Worker's Wallet Address" required className="p-2 border rounded" />
+                <input
+                  name="amount"
+                  placeholder="Amount (in Octas)"
+                  type="number"
+                  required
+                  className="p-2 border rounded"
+                />
+                <button
+                  type="submit"
+                  disabled={transactionInProgress}
+                  className="gradient-button p-3 rounded-lg font-semibold"
+                >
+                  {transactionInProgress ? "Processing..." : "Create Escrow"}
+                </button>
+              </form>
+            </div>
 
-      {/* Tab Content */}
-      {activeTab === "put" ? <PutWorkForm /> : <ReviewWorkTable />}
-
-      {/* Contracts Table */}
-      <div className="mt-8">
-        <ContractsTable />
-      </div>
-    </div>
-  );
-}
-
-function PutWorkForm() {
-  return (
-    <form className="space-y-4 bg-white shadow-md rounded p-6">
-      <div>
-        <label className="block font-medium">Worker Address</label>
-        <input type="text" className="w-full border rounded p-2" />
-      </div>
-      <div>
-        <label className="block font-medium">Amount (APT)</label>
-        <input type="number" className="w-full border rounded p-2" />
-      </div>
-      <div>
-        <label className="block font-medium">Deadline</label>
-        <input type="datetime-local" className="w-full border rounded p-2" />
-      </div>
-      <div>
-        <label className="block font-medium">Penalty</label>
-        <input type="number" className="w-full border rounded p-2" />
-      </div>
-      <button type="submit" className="px-4 py-2 bg-indigo-600 text-white rounded">
-        Create Contract
-      </button>
-    </form>
-  );
-}
-
-function ReviewWorkTable() {
-  // You’ll fetch contracts from chain here
-  const dummy = [{ id: 1, worker: "0xabc...", amount: 50, deadline: "2025-10-01", status: "Completed" }];
-
-  return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">Contracts Pending Review</h2>
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">ID</th>
-            <th className="p-2 border">Worker</th>
-            <th className="p-2 border">Amount</th>
-            <th className="p-2 border">Deadline</th>
-            <th className="p-2 border">Action</th>
-          </tr>
-        </thead>
-        <tbody>
-          {dummy.map((c) => (
-            <tr key={c.id}>
-              <td className="p-2 border">{c.id}</td>
-              <td className="p-2 border">{c.worker}</td>
-              <td className="p-2 border">{c.amount}</td>
-              <td className="p-2 border">{c.deadline}</td>
-              <td className="p-2 border">
-                <button className="px-3 py-1 bg-green-500 text-white rounded mr-2">Approve</button>
-                <button className="px-3 py-1 bg-red-500 text-white rounded">Reject</button>
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
-    </div>
-  );
-}
-
-function ContractsTable() {
-  // Example dummy contracts
-  const contracts = [
-    { id: 1, worker: "0x123...", amount: 100, status: "In Progress" },
-    { id: 2, worker: "0x456...", amount: 50, status: "Completed" },
-  ];
-
-  return (
-    <div>
-      <h2 className="text-xl font-semibold mb-4">My Contracts</h2>
-      <table className="w-full border">
-        <thead>
-          <tr className="bg-gray-100">
-            <th className="p-2 border">ID</th>
-            <th className="p-2 border">Worker</th>
-            <th className="p-2 border">Amount</th>
-            <th className="p-2 border">Status</th>
-          </tr>
-        </thead>
-        <tbody>
-          {contracts.map((c) => (
-            <tr key={c.id}>
-              <td className="p-2 border">{c.id}</td>
-              <td className="p-2 border">{c.worker}</td>
-              <td className="p-2 border">{c.amount}</td>
-              <td className="p-2 border">{c.status}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {/* --- Contract List Section --- */}
+            <div>
+              <div className="flex justify-between items-center mb-4">
+                <h2 className="text-2xl font-bold">Your Contracts</h2>
+                <button
+                  onClick={refreshContractList}
+                  disabled={isLoading || transactionInProgress}
+                  className="p-2 border rounded"
+                >
+                  {isLoading ? "Refreshing..." : "Refresh"}
+                </button>
+              </div>
+              {isLoading ? (
+                <p>Loading your contracts...</p>
+              ) : contracts.length === 0 ? (
+                <p>You have not created any contracts yet.</p>
+              ) : (
+                <div className="space-y-4">
+                  {contracts.map((contract, id) => (
+                    <div key={id} className="p-4 border rounded-lg shadow">
+                      <p>
+                        <b>Contract ID:</b> {id}
+                      </p>
+                      <p>
+                        <b>Worker:</b> {contract.worker}
+                      </p>
+                      <p>
+                        <b>Status:</b> {contract.is_completed ? "Completed" : "In Progress"}
+                      </p>
+                      <div className="mt-4 flex gap-4">
+                        {/* 5. Wire up the buttons to the hook functions */}
+                        <button
+                          onClick={async () => {
+                            await markCompleted(id);
+                            await refreshContractList();
+                          }}
+                          disabled={contract.is_completed || transactionInProgress}
+                          className="bg-green-500 text-white p-2 rounded disabled:bg-gray-400"
+                        >
+                          Mark as Completed
+                        </button>
+                        <button
+                          onClick={async () => {
+                            await refundOrFine(id);
+                            await refreshContractList();
+                          }}
+                          disabled={contract.is_claimed || transactionInProgress}
+                          className="bg-blue-500 text-white p-2 rounded disabled:bg-gray-400"
+                        >
+                          Settle & Pay
+                        </button>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+      </main>
     </div>
   );
 }

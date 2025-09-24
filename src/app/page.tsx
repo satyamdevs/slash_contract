@@ -13,21 +13,6 @@ function App() {
       <Header />
       <Hero />
       <div className="flex items-center justify-center flex-col">
-        {/* {connected ? (
-          <Card>
-            <CardContent className="flex flex-col gap-10 pt-6">
-              <WalletDetails />
-              <NetworkInfo />
-              <AccountInfo />
-              <TransferAPT />
-              <MessageBoard />
-            </CardContent>
-          </Card>
-        ) : (
-          <CardHeader>
-            <CardTitle>To get started Connect a wallet</CardTitle>
-          </CardHeader>
-        )} */}
       </div>
       <div></div>
     </div>
