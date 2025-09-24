@@ -1,5 +1,4 @@
-> Rishav:
-// src/pages/dashboard.tsx
+
 "use client";
 
 import { Header } from "@/components/Header";
