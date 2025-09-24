@@ -134,6 +134,21 @@ coin::deposit<AptosCoin>(contract.worker, coin::extract(&mut coins, payment_afte
     contract.is_claimed = true;
 }
 
+#[view]
+    public fun get_contract_by_employer(
+        employer_addr: address,
+        contract_id: u64
+    ): WorkContract acquires WorkContractState {
+        // Assert the state exists to provide a clear error if not
+        assert!(exists<WorkContractState>(employer_addr), 50);
+
+        let state = borrow_global<WorkContractState>(employer_addr);
+        assert!(table::contains(&state.contracts, contract_id), 51);
+
+        // Borrow and return a copy of the contract struct
+        *table::borrow(&state.contracts, contract_id)
+    }
+
 
 
 }
