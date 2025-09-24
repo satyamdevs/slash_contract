@@ -135,20 +135,27 @@ coin::deposit<AptosCoin>(contract.worker, coin::extract(&mut coins, payment_afte
 }
 
 #[view]
-    public fun get_contract_by_employer(
-        employer_addr: address,
-        contract_id: u64
-    ): WorkContract acquires WorkContractState {
-        // Assert the state exists to provide a clear error if not
-        assert!(exists<WorkContractState>(employer_addr), 50);
+public fun get_all_contracts_by_employer(
+    employer_addr: address
+): vector<WorkContract> acquires WorkContractState {
+    assert!(exists<WorkContractState>(employer_addr), 50); // Employer must have contracts
 
-        let state = borrow_global<WorkContractState>(employer_addr);
-        assert!(table::contains(&state.contracts, contract_id), 51);
+    let state = borrow_global<WorkContractState>(employer_addr);
+    let contract_ids = table::keys(&state.contracts); // Get all contract IDs
 
-        // Borrow and return a copy of the contract struct
-        *table::borrow(&state.contracts, contract_id)
-    }
+    let contracts = vector::empty<WorkContract>();
+    let i = 0;
+    let len = vector::length(&contract_ids);
 
+    while (i < len) {
+        let contract_id = *vector::borrow(&contract_ids, i);
+        let contract = table::borrow(&state.contracts, contract_id);
+        vector::push_back(&mut contracts, *contract);
+        i = i + 1;
+    };
+
+    contracts
+}
 
 
 }
